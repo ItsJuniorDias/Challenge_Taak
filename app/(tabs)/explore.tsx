@@ -3,7 +3,7 @@ import { Text } from "@/components";
 import { Colors } from "@/constants/Colors";
 import { View } from "react-native";
 
-export default function TabTwoScreen() {
+export default function ExploreScreen() {
   return (
     <View
       style={{

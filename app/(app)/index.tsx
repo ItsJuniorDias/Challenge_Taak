@@ -17,6 +17,7 @@ export default function OnboardingScreen() {
       />
 
       <Button
+        testID="button_testID"
         title="Go to HomeScreen"
         backgroundColor={Colors.light.tint}
         colorText={Colors.light.background}

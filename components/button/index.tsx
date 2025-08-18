@@ -3,7 +3,8 @@ import { Text } from "..";
 import { Button } from "./styles";
 import { TouchableOpacityProps } from "react-native";
 
-interface ButtonComponentProps extends TouchableOpacityProps {
+export interface ButtonComponentProps extends TouchableOpacityProps {
+  testID?: string;
   title: string;
   backgroundColor: string;
   colorText: string;
@@ -11,6 +12,7 @@ interface ButtonComponentProps extends TouchableOpacityProps {
 }
 
 export default function ButtonComponent({
+  testID = "button_testID",
   title,
   backgroundColor,
   colorText,
@@ -18,7 +20,12 @@ export default function ButtonComponent({
   ...props
 }: ButtonComponentProps) {
   return (
-    <Button {...props} onPress={onPress} backgroundColor={backgroundColor}>
+    <Button
+      {...props}
+      testID={testID}
+      onPress={onPress}
+      backgroundColor={backgroundColor}
+    >
       <Text
         title={title}
         color={colorText}

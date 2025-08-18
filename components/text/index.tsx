@@ -3,6 +3,7 @@ import { TextProps } from "react-native";
 import { Text } from "./styles";
 
 export interface TextComponentProps extends TextProps {
+  testID?: string;
   title: string;
   fontFamily: "regular" | "semi-bold" | "bold";
   fontSize: 12 | 14 | 16 | 20 | 24 | 32 | 40 | 48 | 64 | 80 | 96;
@@ -10,6 +11,7 @@ export interface TextComponentProps extends TextProps {
 }
 
 export default function TextComponent({
+  testID = "text_testID",
   title,
   fontFamily,
   color,
@@ -25,6 +27,7 @@ export default function TextComponent({
   return (
     <Text
       {...props}
+      testID={testID}
       title={title}
       fontFamily={objectLiteralsFontFamily[fontFamily]}
       fontSize={fontSize}
