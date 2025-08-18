@@ -1,3 +1,4 @@
+import React from "react";
 import {
   DarkTheme,
   DefaultTheme,
@@ -25,7 +26,8 @@ export default function RootLayout() {
 
   return (
     <ThemeProvider value={colorScheme === "dark" ? DarkTheme : DefaultTheme}>
-      <Stack>
+      <Stack initialRouteName="(app)/index">
+        <Stack.Screen name="(app)/index" options={{ headerShown: false }} />
         <Stack.Screen name="(tabs)" options={{ headerShown: false }} />
       </Stack>
       <StatusBar style="auto" />

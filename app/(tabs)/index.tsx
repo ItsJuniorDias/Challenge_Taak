@@ -1,3 +1,4 @@
+import React from "react";
 import { Text } from "@/components";
 import { Colors } from "@/constants/Colors";
 import { View } from "react-native";
@@ -13,7 +14,7 @@ export default function HomeScreen() {
     >
       <Text
         title="Screen Home"
-        fontFamily="regular"
+        fontFamily="semi-bold"
         fontSize={16}
         color={Colors.light.text}
       />

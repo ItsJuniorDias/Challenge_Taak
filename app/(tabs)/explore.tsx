@@ -1,3 +1,4 @@
+import React from "react";
 import { Text } from "@/components";
 import { Colors } from "@/constants/Colors";
 import { View } from "react-native";
@@ -13,7 +14,7 @@ export default function TabTwoScreen() {
     >
       <Text
         title="Screen Explore"
-        fontFamily="regular"
+        fontFamily="semi-bold"
         fontSize={16}
         color={Colors.light.text}
       />
