@@ -1,15 +1,41 @@
 import React, { useState } from "react";
-import { Text, Header, Card, FloatButton, Input } from "@/components";
+import { Header, Card, FloatButton, Input, Button } from "@/components";
 import { Colors } from "@/constants/Colors";
 import { View, StyleSheet, ScrollView } from "react-native";
-import { useRouter } from "expo-router";
+
+import { useForm, Controller } from "react-hook-form";
+import { z } from "zod";
+import { zodResolver } from "@hookform/resolvers/zod";
+
+const schema = z.object({
+  name: z.string().min(1, "* Nome da empresa é obrigatório"),
+  cnpj: z.string().min(1, "* CNPJ é obrigatório"),
+  contact: z.string().min(1, "* Contato é obrigatório"),
+});
+
+type FormData = z.infer<typeof schema>;
 
 export default function ExploreScreen() {
   const [isActiveForm, setIsActiveForm] = useState(false);
 
-  const [value, setValue] = useState("");
+  const {
+    control,
+    handleSubmit,
+    formState: { errors },
+  } = useForm<FormData>({
+    resolver: zodResolver(schema),
+    defaultValues: {
+      name: "",
+      cnpj: "",
+      contact: "",
+    },
+  });
 
-  const router = useRouter();
+  console.log(errors, "ERROR");
+
+  const onSubmit = (data: FormData) => {
+    console.log(data);
+  };
 
   return (
     <>
@@ -26,19 +52,62 @@ export default function ExploreScreen() {
 
         {isActiveForm && (
           <>
-            <Input
-              value={value}
-              placeholder="Nome da empresa"
-              onChangeText={setValue}
+            <Controller
+              name="name"
+              control={control}
+              render={({ field: { value, onChange } }) => (
+                <Input
+                  value={value}
+                  placeholder="Nome da empresa"
+                  onChangeText={onChange}
+                  error={errors.name?.message}
+                />
+              )}
             />
 
-            <Input value={value} placeholder="CNPJ" onChangeText={setValue} />
-
-            <Input
-              value={value}
-              placeholder="Contato"
-              onChangeText={setValue}
+            <Controller
+              name="cnpj"
+              control={control}
+              render={({ field: { value, onChange } }) => (
+                <Input
+                  value={value}
+                  placeholder="CNPJ "
+                  onChangeText={onChange}
+                  error={errors.cnpj?.message}
+                />
+              )}
             />
+
+            <Controller
+              name="contact"
+              control={control}
+              render={({ field: { value, onChange } }) => (
+                <Input
+                  value={value}
+                  placeholder="Contato"
+                  onChangeText={onChange}
+                  error={errors.contact?.message}
+                />
+              )}
+            />
+
+            <View style={styles.contentButton}>
+              <Button
+                title="Voltar"
+                backgroundColor="#919191"
+                colorText={Colors.light.background}
+                onPress={() => setIsActiveForm(false)}
+                style={{ width: "45%" }}
+              />
+
+              <Button
+                title="Salvar"
+                backgroundColor={Colors.light.tint}
+                colorText={Colors.light.background}
+                onPress={handleSubmit(onSubmit)}
+                style={{ width: "45%" }}
+              />
+            </View>
           </>
         )}
 
@@ -53,5 +122,10 @@ const styles = StyleSheet.create({
     flex: 1,
     backgroundColor: "#f2f2f2",
     paddingHorizontal: 24,
+  },
+  contentButton: {
+    flexDirection: "row",
+    justifyContent: "space-between",
+    marginTop: 24,
   },
 });
