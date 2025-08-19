@@ -1,7 +1,7 @@
 import React from "react";
 import { render, fireEvent } from "@testing-library/react-native";
 
-import Button, { ButtonComponentProps } from "./index";
+import Button, { ButtonComponentProps } from "../components/button";
 
 describe("Behavior component Button", () => {
   const mockOnPress = jest.fn();

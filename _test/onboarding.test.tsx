@@ -1,7 +1,7 @@
 import React from "react";
 import { fireEvent, render } from "@testing-library/react-native";
 
-import OnboardingScreen from "./index";
+import OnboardingScreen from "../app/(app)";
 
 const mockOnPress = jest.fn();
 
