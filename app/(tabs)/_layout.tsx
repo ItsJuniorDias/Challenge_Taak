@@ -1,6 +1,7 @@
 import { Tabs } from "expo-router";
 import React from "react";
 import { Platform } from "react-native";
+import Feather from "@expo/vector-icons/Feather";
 
 import MaterialIcons from "@expo/vector-icons/MaterialIcons";
 
@@ -30,11 +31,20 @@ export default function TabLayout() {
         }}
       />
       <Tabs.Screen
-        name="explore"
+        name="clients"
         options={{
-          title: "Explore",
+          title: "Clientes",
           tabBarIcon: ({ color }) => (
-            <MaterialIcons size={28} name="explore" color={color} />
+            <Feather size={28} name="users" color={color} />
+          ),
+        }}
+      />
+      <Tabs.Screen
+        name="contact"
+        options={{
+          title: "Contatos",
+          tabBarIcon: ({ color }) => (
+            <Feather size={28} name="user" color={color} />
           ),
         }}
       />

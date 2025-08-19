@@ -6,6 +6,7 @@ import { useFonts } from "expo-font";
 import { Stack } from "expo-router";
 import { StatusBar } from "expo-status-bar";
 import * as SplashScreen from "expo-splash-screen";
+import { FloatButton } from "@/components";
 
 // Set the animation options. This is optional.
 SplashScreen.setOptions({
@@ -26,11 +27,10 @@ export default function RootLayout() {
 
   return (
     <ThemeProvider value={DefaultTheme}>
-      <Stack initialRouteName="(app)/index">
-        <Stack.Screen name="(app)/index" options={{ headerShown: false }} />
-
+      <Stack initialRouteName="(tabs)">
         <Stack.Screen name="(tabs)" options={{ headerShown: false }} />
       </Stack>
+
       <StatusBar style="auto" />
     </ThemeProvider>
   );
