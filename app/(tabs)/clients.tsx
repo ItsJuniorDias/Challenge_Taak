@@ -1,13 +1,16 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { Header, Card, FloatButton, Input, Button } from "@/components";
 import { Colors } from "@/constants/Colors";
-import { View, StyleSheet, ScrollView } from "react-native";
+import { View, StyleSheet, ScrollView, FlatList, Alert } from "react-native";
 
 import { useForm, Controller } from "react-hook-form";
-import { z } from "zod";
+import { uuidv4, z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
+import { useClientHook } from "@/hooks";
+import { useRouter } from "expo-router";
 
 const schema = z.object({
+  id: uuidv4().optional(),
   name: z.string().min(1, "* Nome da empresa é obrigatório"),
   cnpj: z.string().min(1, "* CNPJ é obrigatório"),
   contact: z.string().min(1, "* Contato é obrigatório"),
@@ -15,13 +18,23 @@ const schema = z.object({
 
 type FormData = z.infer<typeof schema>;
 
-export default function ExploreScreen() {
+export default function ClientScreen() {
+  const { query, mutationCreate, mutationDelete, mutationEdit } =
+    useClientHook();
+
+  const router = useRouter();
+
+  // console.log(query.data, "DATA");
+
   const [isActiveForm, setIsActiveForm] = useState(false);
+  const [isEdit, setIsEdit] = useState(false);
 
   const {
     control,
     handleSubmit,
     formState: { errors },
+    resetField,
+    setValue,
   } = useForm<FormData>({
     resolver: zodResolver(schema),
     defaultValues: {
@@ -31,10 +44,45 @@ export default function ExploreScreen() {
     },
   });
 
-  console.log(errors, "ERROR");
+  const onSubmit = (data) => {
+    if (isEdit) {
+      mutationEdit.mutate(data);
+    } else {
+      mutationCreate.mutate(data);
+    }
 
-  const onSubmit = (data: FormData) => {
-    console.log(data);
+    setIsActiveForm(false);
+
+    resetField("name");
+    resetField("cnpj");
+    resetField("contact");
+  };
+
+  const handleDeleteOrEdit = ({ id, name, cnpj, contact }) => {
+    Alert.alert(
+      "Deseja deletar ou editar",
+      "Escolha se você quer editar ou deletar",
+      [
+        {
+          text: "Editar",
+          onPress: () => {
+            setIsEdit(true);
+            setIsActiveForm(true);
+
+            setValue("id", id);
+            setValue("name", name);
+            setValue("cnpj", cnpj);
+            setValue("contact", contact);
+          },
+          style: "cancel",
+        },
+        {
+          text: "Deletar",
+          onPress: () => mutationDelete.mutate(id),
+          style: "destructive",
+        },
+      ]
+    );
   };
 
   return (
@@ -43,10 +91,25 @@ export default function ExploreScreen() {
 
       <ScrollView contentContainerStyle={styles.container}>
         {!isActiveForm && (
-          <Card
-            title="GRUPO Taak"
-            cnpj="11.222.333/0001-44"
-            contact="Matheus coelho campos"
+          <FlatList
+            data={query.data}
+            renderItem={({ item }) => (
+              <Card
+                id={item.id}
+                title={item.name}
+                cnpj={item.cnpj}
+                contact={item.contact}
+                onPress={() =>
+                  handleDeleteOrEdit({
+                    id: item.id,
+                    name: item.name,
+                    cnpj: item.cnpj,
+                    contact: item.contact,
+                  })
+                }
+              />
+            )}
+            keyExtractor={(item) => item.id}
           />
         )}
 
@@ -101,6 +164,7 @@ export default function ExploreScreen() {
               />
 
               <Button
+                isLoading={query.isLoading}
                 title="Salvar"
                 backgroundColor={Colors.light.tint}
                 colorText={Colors.light.background}
@@ -110,9 +174,9 @@ export default function ExploreScreen() {
             </View>
           </>
         )}
-
-        <FloatButton onPress={() => setIsActiveForm(true)} />
       </ScrollView>
+
+      <FloatButton onPress={() => setIsActiveForm(true)} />
     </>
   );
 }

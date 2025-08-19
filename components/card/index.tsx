@@ -7,14 +7,22 @@ import { Colors } from "@/constants/Colors";
 import { View } from "react-native";
 
 interface CardComponent {
+  id: number;
   title: string;
   cnpj: string;
   contact: string;
+  onPress: () => void;
 }
 
-export default function CardComponent({ title, cnpj, contact }: CardComponent) {
+export default function CardComponent({
+  id,
+  title,
+  cnpj,
+  contact,
+  onPress,
+}: CardComponent) {
   return (
-    <Container>
+    <Container key={id} onPress={onPress}>
       <Text
         title={title}
         color={Colors.light.grayText}

@@ -1,7 +1,8 @@
 import React from "react";
 import { Text } from "..";
 import { Button } from "./styles";
-import { TouchableOpacityProps } from "react-native";
+import { ActivityIndicator, TouchableOpacityProps } from "react-native";
+import { Colors } from "@/constants/Colors";
 
 export interface ButtonComponentProps extends TouchableOpacityProps {
   testID?: string;
@@ -9,6 +10,7 @@ export interface ButtonComponentProps extends TouchableOpacityProps {
   backgroundColor: string;
   colorText: string;
   onPress: () => void;
+  isLoading?: boolean;
 }
 
 export default function ButtonComponent({
@@ -17,6 +19,7 @@ export default function ButtonComponent({
   backgroundColor,
   colorText,
   onPress,
+  isLoading,
   ...props
 }: ButtonComponentProps) {
   return (
@@ -26,12 +29,18 @@ export default function ButtonComponent({
       onPress={onPress}
       backgroundColor={backgroundColor}
     >
-      <Text
-        title={title}
-        color={colorText}
-        fontFamily="semi-bold"
-        fontSize={16}
-      />
+      {isLoading && (
+        <ActivityIndicator color={Colors.light.background} size="small" />
+      )}
+
+      {!isLoading && (
+        <Text
+          title={title}
+          color={colorText}
+          fontFamily="semi-bold"
+          fontSize={16}
+        />
+      )}
     </Button>
   );
 }

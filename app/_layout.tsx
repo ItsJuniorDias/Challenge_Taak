@@ -6,13 +6,15 @@ import { useFonts } from "expo-font";
 import { Stack } from "expo-router";
 import { StatusBar } from "expo-status-bar";
 import * as SplashScreen from "expo-splash-screen";
-import { FloatButton } from "@/components";
 
-// Set the animation options. This is optional.
+import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
+
 SplashScreen.setOptions({
   duration: 1000,
   fade: true,
 });
+
+const queryClient = new QueryClient();
 
 export default function RootLayout() {
   const [loaded] = useFonts({
@@ -26,12 +28,14 @@ export default function RootLayout() {
   }
 
   return (
-    <ThemeProvider value={DefaultTheme}>
-      <Stack initialRouteName="(tabs)">
-        <Stack.Screen name="(tabs)" options={{ headerShown: false }} />
-      </Stack>
+    <QueryClientProvider client={queryClient}>
+      <ThemeProvider value={DefaultTheme}>
+        <Stack initialRouteName="(tabs)">
+          <Stack.Screen name="(tabs)" options={{ headerShown: false }} />
+        </Stack>
 
-      <StatusBar style="auto" />
-    </ThemeProvider>
+        <StatusBar style="auto" />
+      </ThemeProvider>
+    </QueryClientProvider>
   );
 }
