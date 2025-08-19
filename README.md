@@ -12,6 +12,12 @@ This is an [Expo](https://expo.dev) project created with [`create-expo-app`](htt
 
 <img width="579" height="382" alt="Captura de Tela 2025-08-18 às 19 06 59" src="https://github.com/user-attachments/assets/310aaa37-ece1-4ad1-ae26-eb4ffa7cf7a5" />
 
+## JSON Server
+
+  ```bash
+  json-server --watch db.json --port 3000
+   ```
+
 1. Install dependencies
 
    ```bash
