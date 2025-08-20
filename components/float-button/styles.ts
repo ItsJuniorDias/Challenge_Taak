@@ -1,4 +1,5 @@
 import { Colors } from "@/constants/Colors";
+import { Platform } from "react-native";
 import styled from "styled-components/native";
 
 export const Container = styled.TouchableOpacity`
@@ -10,5 +11,5 @@ export const Container = styled.TouchableOpacity`
   align-items: center;
   justify-content: center;
   right: 20;
-  bottom: 120;
+  bottom: ${Platform.OS === "android" ? 32 : 120};
 `;
