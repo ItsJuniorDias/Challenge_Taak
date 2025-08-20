@@ -11,6 +11,12 @@
       "name": "Teste ",
       "cnpj": "000000000",
       "contact": "Alexandre Junior"
+    },
+    {
+      "id": "6c3377aa-071c-411c-b406-9cbb2a100dd8",
+      "name": "Teste",
+      "cnpj": "0000000",
+      "contact": "Contato"
     }
   ]
 }
