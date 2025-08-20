@@ -62,8 +62,6 @@ export default function useClientHook() {
         contact: data.contact,
       });
 
-      console.log(response, "RESPONSE EDIT");
-
       return response.data;
     } catch (error) {
       console.log(error);
