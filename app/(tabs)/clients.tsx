@@ -176,7 +176,16 @@ export default function ClientScreen() {
         )}
       </ScrollView>
 
-      <FloatButton onPress={() => setIsActiveForm(true)} />
+      <FloatButton
+        onPress={() => {
+          setIsEdit(false);
+          setIsActiveForm(true);
+
+          resetField("name");
+          resetField("cnpj");
+          resetField("contact");
+        }}
+      />
     </>
   );
 }
