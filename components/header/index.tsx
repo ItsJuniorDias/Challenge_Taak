@@ -5,14 +5,19 @@ import { Text } from "../";
 import { Container } from "./styles";
 import { Colors } from "@/constants/Colors";
 
-interface HeaderProps {
+export interface HeaderProps {
+  testID: string;
   title: string;
   description: string;
 }
 
-export default function Header({ title, description }: HeaderProps) {
+export default function Header({
+  testID = "header_testID",
+  title,
+  description,
+}: HeaderProps) {
   return (
-    <Container>
+    <Container testID={testID}>
       <Text
         title={title}
         color={Colors.light.background}
