@@ -10,6 +10,7 @@ module.exports = {
     "/metro.config.js",
     "/scripts/reset-project.js",
     "/constants/Colors.ts",
+    "/service/api.ts",
   ],
   collectCoverage: true,
   collectCoverageFrom: [

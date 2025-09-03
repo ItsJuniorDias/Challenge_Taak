@@ -1,15 +1,15 @@
 import React from "react";
 import { render } from "@testing-library/react-native";
 
-import HomeScreen from "../app/(tabs)/index";
+import ContactScreen from "../../app/(tabs)/contact";
 
-describe("Behavior screen HomeScreen", () => {
-  const setup = () => render(<HomeScreen />);
+describe("Behavior screen ContactScreen", () => {
+  const setup = () => render(<ContactScreen />);
 
   it("should render text component", () => {
     const { getByText } = setup();
 
-    const text = getByText("Screen Home");
+    const text = getByText("Contas cadastradas");
 
     expect(text).toBeTruthy();
   });

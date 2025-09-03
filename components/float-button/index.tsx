@@ -6,14 +6,16 @@ import { Colors } from "@/constants/Colors";
 import { useRouter } from "expo-router";
 
 interface FloatButtonComponentProps {
+  testID?: string;
   onPress: () => void;
 }
 
 export default function FloatButtonComponent({
+  testID = "float_button_testID",
   onPress,
 }: FloatButtonComponentProps) {
   return (
-    <Container onPress={onPress} style={styles.container}>
+    <Container testID={testID} onPress={onPress} style={styles.container}>
       <Feather name="plus" size={32} color={Colors.light.tint} />
     </Container>
   );

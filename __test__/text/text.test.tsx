@@ -1,7 +1,7 @@
 import React from "react";
 import { render } from "@testing-library/react-native";
 
-import Text, { TextComponentProps } from "../components/text";
+import Text, { TextComponentProps } from "../../components/text";
 
 describe("Behavior component Text", () => {
   const props: TextComponentProps = {

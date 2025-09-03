@@ -6,7 +6,8 @@ import { Container, Row } from "./styles";
 import { Colors } from "@/constants/Colors";
 import { View } from "react-native";
 
-interface CardComponent {
+export interface CardComponentProps {
+  testID?: string;
   id: number;
   title: string;
   cnpj: string;
@@ -15,14 +16,15 @@ interface CardComponent {
 }
 
 export default function CardComponent({
+  testID = "card_component_testID",
   id,
   title,
   cnpj,
   contact,
   onPress,
-}: CardComponent) {
+}: CardComponentProps) {
   return (
-    <Container key={id} onPress={onPress}>
+    <Container testID={testID} key={id} onPress={onPress}>
       <Text
         title={title}
         color={Colors.light.grayText}

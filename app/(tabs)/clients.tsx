@@ -164,11 +164,12 @@ export default function ClientScreen() {
               />
 
               <Button
+                testID="button_safe_testID"
                 isLoading={query.isLoading}
                 title="Salvar"
                 backgroundColor={Colors.light.tint}
                 colorText={Colors.light.background}
-                onPress={handleSubmit(onSubmit)}
+                onPress={() => handleSubmit((data) => onSubmit(data))}
                 style={{ width: "45%" }}
               />
             </View>
