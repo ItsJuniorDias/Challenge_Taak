@@ -6,7 +6,7 @@ import { Container } from "./styles";
 import { Colors } from "@/constants/Colors";
 
 export interface HeaderProps {
-  testID: string;
+  testID?: string;
   title: string;
   description: string;
 }

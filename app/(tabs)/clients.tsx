@@ -19,8 +19,14 @@ const schema = z.object({
 type FormData = z.infer<typeof schema>;
 
 export default function ClientScreen() {
-  const { query, mutationCreate, mutationDelete, mutationEdit } =
-    useClientHook();
+  const {
+    query,
+    mutationCreate,
+    mutationDelete,
+    mutationEdit,
+    addClientWatermelon,
+    clients,
+  } = useClientHook();
 
   const router = useRouter();
 
@@ -44,19 +50,21 @@ export default function ClientScreen() {
     },
   });
 
-  const onSubmit = (data) => {
-    if (isEdit) {
-      mutationEdit.mutate(data);
-    } else {
-      mutationCreate.mutate(data);
-    }
+  // const onSubmit = (data) => {
+  //   console.log( "CLICOU AQUI");
 
-    setIsActiveForm(false);
+  //   // if (isEdit) {
+  //   //   mutationEdit.mutate(data);
+  //   // } else {
+  //   //   mutationCreate.mutate(data);
+  //   // }
 
-    resetField("name");
-    resetField("cnpj");
-    resetField("contact");
-  };
+  //   // setIsActiveForm(false);
+
+  //   // resetField("name");
+  //   // resetField("cnpj");
+  //   // resetField("contact");
+  // };
 
   const handleDeleteOrEdit = ({ id, name, cnpj, contact }) => {
     Alert.alert(
@@ -92,7 +100,7 @@ export default function ClientScreen() {
       <ScrollView contentContainerStyle={styles.container}>
         {!isActiveForm && (
           <FlatList
-            data={query.data}
+            data={clients}
             renderItem={({ item }) => (
               <Card
                 id={item.id}
@@ -169,7 +177,13 @@ export default function ClientScreen() {
                 title="Salvar"
                 backgroundColor={Colors.light.tint}
                 colorText={Colors.light.background}
-                onPress={() => handleSubmit((data) => onSubmit(data))}
+                onPress={() => {
+                  addClientWatermelon({
+                    name: control._formValues.name,
+                    cnpj: control._formValues.cnpj,
+                    contact: control._formValues.contact,
+                  });
+                }}
                 style={{ width: "45%" }}
               />
             </View>
