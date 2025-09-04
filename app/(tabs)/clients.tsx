@@ -25,6 +25,7 @@ export default function ClientScreen() {
     mutationDelete,
     mutationEdit,
     addClientWatermelon,
+    deleteClientWatermelon,
     clients,
   } = useClientHook();
 
@@ -76,7 +77,6 @@ export default function ClientScreen() {
           onPress: () => {
             setIsEdit(true);
             setIsActiveForm(true);
-
             setValue("id", id);
             setValue("name", name);
             setValue("cnpj", cnpj);
@@ -86,7 +86,7 @@ export default function ClientScreen() {
         },
         {
           text: "Deletar",
-          onPress: () => mutationDelete.mutate(id),
+          onPress: () => deleteClientWatermelon(id),
           style: "destructive",
         },
       ]
@@ -103,13 +103,13 @@ export default function ClientScreen() {
             data={clients}
             renderItem={({ item }) => (
               <Card
-                id={item.id}
+                id={item?._raw?.id}
                 title={item.name}
                 cnpj={item.cnpj}
                 contact={item.contact}
                 onPress={() =>
                   handleDeleteOrEdit({
-                    id: item.id,
+                    id: item._raw.id,
                     name: item.name,
                     cnpj: item.cnpj,
                     contact: item.contact,

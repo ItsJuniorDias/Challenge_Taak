@@ -17,7 +17,7 @@ export type DataProps = {
 export default function useClientHook() {
   const queryClient = useQueryClient();
 
-  const [clients, setClients] = useState<Client>([
+  const [clients, setClients] = useState([
     {
       name: "",
       cnpj: "",
@@ -41,32 +41,34 @@ export default function useClientHook() {
     loadClientsWatermelon();
   }, []);
 
-  console.log(clients, "CLIENTES ");
-
   const addClientWatermelon = async ({ name, cnpj, contact }) => {
-    console.log("CLICOU AQUI");
-
     try {
-      const result = await database.write(async () => {
-        const response = await database.collections
-          .get("clients")
-          .create((clients) => {
-            clients.name = name;
-            clients.cnpj = cnpj;
-            clients.contact = contact;
-          });
-
-        console.log(response, "RESPONSE CREATE");
+      await database.write(async () => {
+        await database.collections.get("clients").create((clients) => {
+          clients.name = name;
+          clients.cnpj = cnpj;
+          clients.contact = contact;
+        });
       });
 
       loadClientsWatermelon();
-
-      console.log(result, "RESULT");
     } catch (error) {
       console.log(error, "ERROR");
     }
+  };
 
-    // loadClientsWatermelon();
+  const deleteClientWatermelon = async (props) => {
+    try {
+      const client = await database.get("clients").find(props);
+
+      await database.write(async () => {
+        await client.destroyPermanently();
+      });
+
+      loadClientsWatermelon();
+    } catch (error) {
+      console.log(error, "ERROR");
+    }
   };
 
   console.log(clients, "CLIENTS WATERMELON");
@@ -151,7 +153,8 @@ export default function useClientHook() {
     mutationCreate,
     mutationDelete,
     mutationEdit,
-    addClientWatermelon,
     clients,
+    addClientWatermelon,
+    deleteClientWatermelon,
   };
 }
