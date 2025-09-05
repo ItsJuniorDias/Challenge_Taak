@@ -4,9 +4,9 @@ import { field, date } from "@nozbe/watermelondb/decorators";
 class Client extends Model {
   static table = "clients";
 
-  @field("name") name;
-  @field("cnpj") cnpj;
-  @field("contact") contact;
+  @field("name") name!: string;
+  @field("cnpj") cnpj!: string;
+  @field("contact") contact!: string;
 }
 
 export default Client;

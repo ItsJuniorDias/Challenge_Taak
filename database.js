@@ -1,6 +1,6 @@
 import { appSchema, Database, tableSchema } from "@nozbe/watermelondb";
 import SQLiteAdapter from "@nozbe/watermelondb/adapters/sqlite";
-import Client from "./model/Clients";
+import Client from "./model/Client";
 
 const clientSchema = tableSchema({
   name: "clients",
@@ -17,13 +17,13 @@ const appSchemaInstance = appSchema({
 });
 
 const adapter = new SQLiteAdapter({
-  dbName: "taak", // Nome do banco de dados
+  dbName: "taak", // Name database
   schema: appSchemaInstance,
 });
 
 const database = new Database({
   adapter,
-  modelClasses: [Client], // Aqui você vai adicionar suas classes de modelo
+  modelClasses: [Client], // Here you will add your model classes
   actionsEnabled: true,
 });
 

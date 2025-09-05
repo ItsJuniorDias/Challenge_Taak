@@ -1,6 +1,8 @@
 import React, { useEffect, useState } from "react";
 import { Header, Card, FloatButton, Input, Button } from "@/components";
 import { Colors } from "@/constants/Colors";
+import AsyncStorage from "@react-native-async-storage/async-storage";
+
 import { View, StyleSheet, ScrollView, FlatList, Alert } from "react-native";
 
 import { useForm, Controller } from "react-hook-form";
@@ -26,6 +28,7 @@ export default function ClientScreen() {
     mutationEdit,
     addClientWatermelon,
     deleteClientWatermelon,
+    editClientWatermelon,
     clients,
   } = useClientHook();
 
@@ -51,21 +54,34 @@ export default function ClientScreen() {
     },
   });
 
-  // const onSubmit = (data) => {
-  //   console.log( "CLICOU AQUI");
+  const onSubmit = async (data) => {
+    const id = await AsyncStorage.getItem("@id");
 
-  //   // if (isEdit) {
-  //   //   mutationEdit.mutate(data);
-  //   // } else {
-  //   //   mutationCreate.mutate(data);
-  //   // }
+    console.log(id, "ID");
 
-  //   // setIsActiveForm(false);
+    console.log(isEdit, "IS EDIT");
 
-  //   // resetField("name");
-  //   // resetField("cnpj");
-  //   // resetField("contact");
-  // };
+    if (isEdit) {
+      editClientWatermelon({
+        id: id,
+        name: data.name,
+        cnpj: data.cnpj,
+        contact: data.contact,
+      });
+    } else {
+      addClientWatermelon({
+        name: data.name,
+        cnpj: data.cnpj,
+        contact: data.contact,
+      });
+    }
+
+    setIsActiveForm(false);
+
+    resetField("name");
+    resetField("cnpj");
+    resetField("contact");
+  };
 
   const handleDeleteOrEdit = ({ id, name, cnpj, contact }) => {
     Alert.alert(
@@ -74,9 +90,14 @@ export default function ClientScreen() {
       [
         {
           text: "Editar",
-          onPress: () => {
+          onPress: async () => {
             setIsEdit(true);
             setIsActiveForm(true);
+
+            console.log(id, "ID");
+
+            await AsyncStorage.setItem("@id", id);
+
             setValue("id", id);
             setValue("name", name);
             setValue("cnpj", cnpj);
@@ -177,13 +198,7 @@ export default function ClientScreen() {
                 title="Salvar"
                 backgroundColor={Colors.light.tint}
                 colorText={Colors.light.background}
-                onPress={() => {
-                  addClientWatermelon({
-                    name: control._formValues.name,
-                    cnpj: control._formValues.cnpj,
-                    contact: control._formValues.contact,
-                  });
-                }}
+                onPress={handleSubmit(onSubmit)}
                 style={{ width: "45%" }}
               />
             </View>
