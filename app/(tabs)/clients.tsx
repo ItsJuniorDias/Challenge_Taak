@@ -22,10 +22,6 @@ type FormData = z.infer<typeof schema>;
 
 export default function ClientScreen() {
   const {
-    query,
-    mutationCreate,
-    mutationDelete,
-    mutationEdit,
     addClientWatermelon,
     deleteClientWatermelon,
     editClientWatermelon,
