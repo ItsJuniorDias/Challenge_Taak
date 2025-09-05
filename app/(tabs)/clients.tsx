@@ -98,7 +98,6 @@ export default function ClientScreen() {
 
             await AsyncStorage.setItem("@id", id);
 
-            setValue("id", id);
             setValue("name", name);
             setValue("cnpj", cnpj);
             setValue("contact", contact);

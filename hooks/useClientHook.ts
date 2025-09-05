@@ -32,11 +32,7 @@ export default function useClientHook() {
   const loadClientsWatermelon = async () => {
     const clientsCollection = await database.collections.get<Client>("clients");
 
-    console.log(clientsCollection, "CLIENT COLLECTION");
-
     const allClients = await clientsCollection.query().fetch();
-
-    console.log(allClients, "ALL CLIENT QUERY DB");
 
     setClients(allClients);
   };
@@ -46,27 +42,15 @@ export default function useClientHook() {
   }, []);
 
   const editClientWatermelon = async ({ id, name, cnpj, contact }) => {
-    console.log(
-      {
-        id,
-        name,
-        cnpj,
-        contact,
-      },
-      "PROPS EDIT CLIENT WATERMELON"
-    );
+    await database.write(async () => {
+      const client = await database.get<Client>("clients").find(id);
 
-    // await database.write(async () => {
-    //   const client = await database.get<Client>("clients").find(id);
-
-    //   console.log(client, "CLIENT");
-
-    //   await client.update((clients) => {
-    //     clients.name = name;
-    //     clients.cnpj = cnpj;
-    //     clients.contact = contact;
-    //   });
-    // });
+      await client.update((clients) => {
+        clients.name = name;
+        clients.cnpj = cnpj;
+        clients.contact = contact;
+      });
+    });
   };
 
   const addClientWatermelon = async ({ name, cnpj, contact }: ClientProps) => {
