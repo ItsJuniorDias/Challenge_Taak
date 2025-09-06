@@ -27,6 +27,7 @@ export default function InputComponent({
         placeholder={placeholder}
         value={value}
         onChangeText={onChangeText}
+        placeholderTextColor={"#ddd"}
         error={error}
       />
 

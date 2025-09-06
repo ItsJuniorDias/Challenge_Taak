@@ -1,12 +1,15 @@
 import "react-native-get-random-values";
 import { api } from "@/service/api";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
-import { useCallback, useEffect, useState } from "react";
+import { useCallback, useEffect, useRef, useState } from "react";
 import { v4 as uuidv4 } from "uuid";
 
 import database from "../database";
 import Client from "@/model/Client";
 import { Model } from "@nozbe/watermelondb";
+import axios from "axios";
+import AsyncStorage from "@react-native-async-storage/async-storage";
+import { Alert } from "react-native";
 
 interface ClientProps {
   id?: string;
@@ -22,14 +25,19 @@ export default function useClientHook() {
 
   const [clients, setClients] = useState<ClientProps[]>([]);
 
-  console.log(clients, "CLIENTS");
-
   const loadClientsWatermelon = async () => {
     const clientsCollection = await database.collections.get<Client>("clients");
 
     const allClients = await clientsCollection.query().fetch();
 
-    setClients(allClients);
+    const formatClient = allClients.map((item) => ({
+      idWatermelon: item._raw.id,
+      name: item.name,
+      contact: item.contact,
+      cnpj: item.cnpj,
+    }));
+
+    setClients(formatClient);
   };
 
   useEffect(() => {
@@ -64,12 +72,19 @@ export default function useClientHook() {
     }
   };
 
-  const deleteClientWatermelon = async (id: string) => {
+  const deleteClientWatermelon = async (
+    IDWatermelon: string,
+    IDMongo: string
+  ) => {
     try {
-      const client = await database.get("clients").find(id);
+      const client = await database.get("clients").find(IDWatermelon);
 
       await database.write(async () => {
         await client.destroyPermanently();
+
+        api.delete(`/api/clients/${IDMongo}`, {
+          method: "DELETE",
+        });
       });
 
       loadClientsWatermelon();
@@ -78,25 +93,57 @@ export default function useClientHook() {
     }
   };
 
-  const postClientAPI = async () => {
-    try {
-      clients.forEach(async (item) => {
-        const response = await api.post("/clients", {
-          id: item._raw.id,
-          name: item.name,
-          cnpj: item.cnpj,
-          contact: item.contact,
-        });
+  const postClientAPI = useCallback(async () => {
+    if (!clients) return;
 
-        console.log(response.data, "RESPONSE DATA");
-      });
+    const formatClients = clients.map((item) => ({
+      name: item.name,
+      contact: item.contact,
+      cnpj: item.cnpj,
+    }));
+
+    try {
+      const response = await axios.post(
+        "http://localhost:3000/api/clients",
+        formatClients
+      );
+
+      console.log(response.data, "RESPONSE");
     } catch (error) {
-      console.log(error, "ERROR");
+      console.error(error.code, "ERRO GERAL");
+      // if (error.code === "ERR_BAD_REQUEST") {
+      //   Alert.alert("Error", "All customers are already registered.");
+      // }
     }
-  };
+  }, [clients]);
+
+  const fetchClientsMongo = useCallback(async () => {
+    const response = await axios.get("http://localhost:3000/api/clients");
+
+    setClients((prevClients) => {
+      const result = prevClients?.map((watermelon) => {
+        const match = response?.data?.find(
+          (mongo) => mongo?.name === watermelon?.name
+        );
+
+        return {
+          idWatermelon: watermelon?.idWatermelon,
+          idMongo: match ? match?._id : null,
+          name: watermelon?.name,
+          contact: watermelon?.contact,
+          cnpj: watermelon?.cnpj,
+          __v: match ? match?.__v : null,
+        };
+      });
+
+      return result;
+    });
+  }, []);
 
   useEffect(() => {
     postClientAPI();
+
+    fetchClientsMongo();
   }, []);
 
   return {

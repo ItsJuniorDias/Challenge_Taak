@@ -79,7 +79,13 @@ export default function ClientScreen() {
     resetField("contact");
   };
 
-  const handleDeleteOrEdit = ({ id, name, cnpj, contact }) => {
+  const handleDeleteOrEdit = ({
+    idWatermelon,
+    idMongo,
+    name,
+    cnpj,
+    contact,
+  }) => {
     Alert.alert(
       "Deseja deletar ou editar",
       "Escolha se você quer editar ou deletar",
@@ -90,9 +96,7 @@ export default function ClientScreen() {
             setIsEdit(true);
             setIsActiveForm(true);
 
-            console.log(id, "ID");
-
-            await AsyncStorage.setItem("@id", id);
+            await AsyncStorage.setItem("@id", idWatermelon);
 
             setValue("name", name);
             setValue("cnpj", cnpj);
@@ -102,12 +106,14 @@ export default function ClientScreen() {
         },
         {
           text: "Deletar",
-          onPress: () => deleteClientWatermelon(id),
+          onPress: () => deleteClientWatermelon(idWatermelon, idMongo),
           style: "destructive",
         },
       ]
     );
   };
+
+  console.log(clients, "CLIENTS");
 
   return (
     <>
@@ -125,7 +131,8 @@ export default function ClientScreen() {
                 contact={item.contact}
                 onPress={() =>
                   handleDeleteOrEdit({
-                    id: item._raw.id,
+                    idWatermelon: item.idWatermelon,
+                    idMongo: item.idMongo,
                     name: item.name,
                     cnpj: item.cnpj,
                     contact: item.contact,
@@ -189,7 +196,7 @@ export default function ClientScreen() {
 
               <Button
                 testID="button_safe_testID"
-                isLoading={query.isLoading}
+                // isLoading={query.isLoading}
                 title="Salvar"
                 backgroundColor={Colors.light.tint}
                 colorText={Colors.light.background}
