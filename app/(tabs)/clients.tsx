@@ -22,10 +22,11 @@ type FormData = z.infer<typeof schema>;
 
 export default function ClientScreen() {
   const {
+    clients,
+    loading,
     addClientWatermelon,
     deleteClientWatermelon,
     editClientWatermelon,
-    clients,
     postClientAPI,
   } = useClientHook();
 
@@ -126,7 +127,8 @@ export default function ClientScreen() {
             data={clients}
             ListFooterComponent={() => (
               <Button
-                title="Sincronizar lista "
+                isLoading={loading}
+                title="Sincronizar lista"
                 backgroundColor={Colors.light.tint}
                 colorText="#FFFFFF"
                 onPress={() => postClientAPI()}

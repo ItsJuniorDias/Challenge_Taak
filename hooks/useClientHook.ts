@@ -25,6 +25,8 @@ export default function useClientHook() {
 
   const [clients, setClients] = useState<ClientProps[]>([]);
 
+  const [loading, setLoading] = useState(false);
+
   const loadClientsWatermelon = async () => {
     const clientsCollection = await database.collections.get<Client>("clients");
 
@@ -94,16 +96,22 @@ export default function useClientHook() {
   };
 
   const postClientAPI = async () => {
+    setLoading(true);
+
     try {
       const response = await axios.post(
         "http://localhost:3000/api/clients",
         clients
       );
 
+      setLoading(false);
+
       Alert.alert("Success", "the list was updated successfully");
 
       console.log(response.data, "RESPONSE");
     } catch (error) {
+      setLoading(false);
+
       Alert.alert("Erro", "The list is already updated");
       console.error("Erro ao postar clientes:", error);
     }
@@ -138,6 +146,7 @@ export default function useClientHook() {
 
   return {
     clients,
+    loading,
     addClientWatermelon,
     editClientWatermelon,
     deleteClientWatermelon,
