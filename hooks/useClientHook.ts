@@ -93,29 +93,21 @@ export default function useClientHook() {
     }
   };
 
-  const postClientAPI = useCallback(async () => {
-    if (!clients) return;
-
-    const formatClients = clients.map((item) => ({
-      name: item.name,
-      contact: item.contact,
-      cnpj: item.cnpj,
-    }));
-
+  const postClientAPI = async () => {
     try {
       const response = await axios.post(
         "http://localhost:3000/api/clients",
-        formatClients
+        clients
       );
+
+      Alert.alert("Success", "the list was updated successfully");
 
       console.log(response.data, "RESPONSE");
     } catch (error) {
-      console.error(error.code, "ERRO GERAL");
-      // if (error.code === "ERR_BAD_REQUEST") {
-      //   Alert.alert("Error", "All customers are already registered.");
-      // }
+      Alert.alert("Erro", "The list is already updated");
+      console.error("Erro ao postar clientes:", error);
     }
-  }, [clients]);
+  };
 
   const fetchClientsMongo = useCallback(async () => {
     const response = await axios.get("http://localhost:3000/api/clients");
@@ -141,15 +133,14 @@ export default function useClientHook() {
   }, []);
 
   useEffect(() => {
-    postClientAPI();
-
     fetchClientsMongo();
-  }, []);
+  }, [fetchClientsMongo]);
 
   return {
     clients,
     addClientWatermelon,
     editClientWatermelon,
     deleteClientWatermelon,
+    postClientAPI,
   };
 }

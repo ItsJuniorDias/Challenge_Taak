@@ -26,6 +26,7 @@ export default function ClientScreen() {
     deleteClientWatermelon,
     editClientWatermelon,
     clients,
+    postClientAPI,
   } = useClientHook();
 
   const router = useRouter();
@@ -123,6 +124,15 @@ export default function ClientScreen() {
         {!isActiveForm && (
           <FlatList
             data={clients}
+            ListFooterComponent={() => (
+              <Button
+                title="Sincronizar lista "
+                backgroundColor={Colors.light.tint}
+                colorText="#FFFFFF"
+                onPress={() => postClientAPI()}
+                style={{ marginTop: 32 }}
+              />
+            )}
             renderItem={({ item }) => (
               <Card
                 id={item?._raw?.id}
